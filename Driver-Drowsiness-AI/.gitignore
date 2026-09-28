@@ -1,0 +1,26 @@
+# Virtual environment
+.venv/
+
+# Dataset
+Datasets/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Jupyter
+.ipynb_checkpoints/
+
+# VS Code
+.vscode/
+
+# Large trained model
+models/best_model.pth
+
+# Generated files
+Outputs/
+evaluation_results/
+
+# Device configuration (contains Firebase credentials)
+.vigidrive/
+device_config.json

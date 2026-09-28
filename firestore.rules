@@ -1,0 +1,85 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isSystemOwner(systemId) {
+      return isAuthenticated() &&
+        get(/databases/$(database)/documents/systems/$(systemId)).data.ownerUid == request.auth.uid;
+    }
+
+    // Check if authenticated request is from the device assigned to this system
+    function isSystemDevice(systemId) {
+      return isAuthenticated() &&
+        get(/databases/$(database)/documents/systems/$(systemId)).data.deviceAuthUid == request.auth.uid;
+    }
+
+    // Check if update only touches device heartbeat fields (isOnline, isConnected, connectionStatus, lastHeartbeat)
+    function isHeartbeatOnlyUpdate() {
+      let allowedFields = ['isOnline', 'isConnected', 'connectionStatus', 'lastHeartbeat'];
+      let modifiedFields = request.resource.data.diff(resource.data).affectedKeys();
+      return modifiedFields.hasOnly(allowedFields);
+    }
+
+    // Check that protected fields are not being modified
+    function protectedFieldsUnchanged() {
+      let protectedFields = ['ownerUid', 'deviceAuthUid', 'systemName'];
+      return (!request.resource.data.diff(resource.data).affectedKeys().hasAny(protectedFields));
+    }
+
+    // User profile collection
+    match /users/{userId} {
+      allow read, write: if isOwner(userId);
+    }
+
+    // Monitoring systems collection
+    match /systems/{systemId} {
+      // Mobile app: authenticated users can read systems they own
+      allow read: if isAuthenticated() && resource.data.ownerUid == request.auth.uid;
+
+      // Mobile app: authenticated users can create systems they own
+      allow create: if isAuthenticated() && request.resource.data.ownerUid == request.auth.uid;
+
+      // Mobile app: owners can delete their systems
+      allow delete: if isAuthenticated() && resource.data.ownerUid == request.auth.uid;
+
+      // Mobile app: owners can update their systems (protected fields must remain unchanged)
+      allow update: if isAuthenticated()
+                    && resource.data.ownerUid == request.auth.uid
+                    && protectedFieldsUnchanged();
+
+      // PC device: can update ONLY its assigned system's heartbeat fields
+      allow update: if isSystemDevice(systemId) && isHeartbeatOnlyUpdate();
+
+      // Violations subcollection
+      match /violations/{violationId} {
+        // Authenticated users can only read violations of systems they own
+        allow read: if isSystemOwner(systemId);
+
+        // PC device can create violations in its own system with validation
+        allow create: if isSystemDevice(systemId)
+                      && request.resource.data.systemId == systemId
+                      && request.resource.data.type == 'drowsiness'
+                      && request.resource.data.resolved == false
+                      && request.resource.data.timestamp is timestamp
+                      && request.resource.data.durationSeconds is number
+                      && request.resource.data.driverName is string
+                      && ('confidence' in request.resource.data ? (request.resource.data.confidence == null || request.resource.data.confidence is number) : true)
+                      && (!('recordingPath' in request.resource.data) || request.resource.data.recordingPath is string)
+                      && request.resource.data.keys().hasOnly(['systemId', 'timestamp', 'type', 'durationSeconds', 'confidence', 'driverName', 'recordingPath', 'resolved']);
+
+        // Mobile app owner can update/delete violations
+        allow update, delete: if isSystemOwner(systemId);
+      }
+    }
+  }
+}

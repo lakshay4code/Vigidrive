@@ -1,0 +1,221 @@
+# ============================================================================
+# VigiDrive - Comprehensive .gitignore
+# Flutter Android App + Python PC Detector
+# ============================================================================
+
+# ============================================================================
+# FLUTTER / DART
+# ============================================================================
+
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IntelliJ / Android Studio
+*.iml
+*.ipr
+*.iws
+.idea/
+*.hprof
+
+# VS Code (optional - uncomment to exclude)
+.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+.packages
+build/
+coverage/
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android build outputs
+/android/app/debug
+/android/app/profile
+/android/app/release
+/android/.gradle/
+/android/captures/
+/android/local.properties
+/android/app/build/
+/android/build/
+
+# Widget Preview
+.widget_preview/
+
+# ============================================================================
+# PYTHON (PC Detector)
+# ============================================================================
+
+# Virtual environments
+Driver-Drowsiness-AI/.venv/
+Driver-Drowsiness-AI/venv/
+Driver-Drowsiness-AI/env/
+Driver-Drowsiness-AI/ENV/
+
+# Python cache
+Driver-Drowsiness-AI/__pycache__/
+Driver-Drowsiness-AI/**/__pycache__/
+Driver-Drowsiness-AI/**/*.pyc
+Driver-Drowsiness-AI/**/*.pyo
+Driver-Drowsiness-AI/**/*.pyd
+Driver-Drowsiness-AI/.Python
+
+# Pytest
+Driver-Drowsiness-AI/.pytest_cache/
+Driver-Drowsiness-AI/.tox/
+
+# ============================================================================
+# LOCAL DATA (DO NOT COMMIT)
+# ============================================================================
+
+# Local recordings (MP4 files stored on PC)
+Driver-Drowsiness-AI/recordings/
+Driver-Drowsiness-AI/Outputs/
+
+# Local event JSON files
+Driver-Drowsiness-AI/events/
+
+# Evaluation results
+Driver-Drowsiness-AI/evaluation_results/
+
+# ============================================================================
+# FIREBASE SECRETS (CRITICAL - DO NOT COMMIT)
+# ============================================================================
+
+# Firebase service account keys
+**/service-account*.json
+**/serviceAccount*.json
+
+# Google Services (Android Firebase config)
+android/app/google-services.json
+
+# Firebase credentials
+.env
+.env.local
+**/.env
+
+# Firebase debug/emulator
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+
+# ============================================================================
+# TEMPORARY / DEVELOPMENT FILES
+# ============================================================================
+
+# Temporary markdown files
+Driver-Drowsiness-AI/*.md.tmp
+Driver-Drowsiness-AI/execution_trace.md
+Driver-Drowsiness-AI/OFFLINE_STATUS_FIX.md
+Driver-Drowsiness-AI/VIOLATION_FIXES.md
+Driver-Drowsiness-AI/VIOLATION_INTEGRATION.md
+
+# Logs
+*.log
+logs/
+
+# OS specific
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ============================================================================
+# IDE / EDITOR
+# ============================================================================
+
+# VSCode
+.vscode/
+*.code-workspace
+
+# JetBrains IDEs
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# ============================================================================
+# GIT
+# ============================================================================
+
+# Nested git repos (if any remain)
+Driver-Drowsiness-AI/.git/
+
+# ============================================================================
+# BUILD ARTIFACTS
+# ============================================================================
+
+# APKs and bundles
+*.apk
+*.aab
+*.ap_
+*.dex
+
+# Gradle files (Android)
+.gradle/
+gradle-wrapper.jar
+gradlew
+gradlew.bat
+
+# ============================================================================
+# GENERATED / CACHE
+# ============================================================================
+
+# Generated source
+**/generated/
+**/generated_plugin_registrant.dart
+
+# Cache directories
+.cache/
+*.cache
+
+# ============================================================================
+# ALLOWED FILES (Explicitly tracked despite patterns above)
+# ============================================================================
+
+# Keep certain configuration files
+!android/gradle-wrapper.jar
+!android/gradlew
+!android/gradlew.bat
+
+# Keep alarm sound
+!Driver-Drowsiness-AI/alarm.wav
+
+# Keep example/template files if any
+!**/example.env
+
+# ============================================================================
+# GIT BUNDLE BACKUPS (DO NOT COMMIT)
+# ============================================================================
+
+# Git bundle backup files
+*.bundle

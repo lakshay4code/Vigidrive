@@ -1,0 +1,20 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // Helper function
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Violation video recordings
+    // Pattern: systems/{systemId}/violations/{violationId}/{fileName}
+    match /systems/{systemId}/violations/{violationId}/{fileName} {
+      // Authenticated users can retrieve recordings
+      allow read: if isAuthenticated();
+      // Only backend detector pipeline with service credentials may upload
+      allow write: if false;
+    }
+  }
+}
